@@ -221,7 +221,6 @@ jobs:
       - name: Autonomous Remediation (cm fix, top-N)
         id: fix
         # Open a remediation PR on push or manual run; PR events only scan+gate.
-        if: ${{ github.event_name != 'pull_request' && steps.triage.outputs.fix_ids != '' }}
         run: |
           set -uo pipefail
           echo "Remediating top finding(s): ${{ steps.triage.outputs.fix_ids }}"
@@ -266,7 +265,6 @@ jobs:
       # working tree differs from HEAD only by cm's patches. Runs on failure
       # too (the PR step below only adds SCAN_FILES regardless).
       - name: Restore unscanned files
-        if: ${{ always() && steps.scope.outputs.park_dir != '' }}
         run: |
           set -euo pipefail
           PARK="${{ steps.scope.outputs.park_dir }}"
